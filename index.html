@@ -3,190 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.B.D.E. Studio | Pro Fashion Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>S.B.D.E. Studio Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-paper: #efdfbb; --panel-bg: #fcf6e8; --text-main: #4a4238;
-            --accent-primary: #6b7a3d; --accent-secondary: #2c3e50;
-            --border-color: #d1c0a3; transition: all 0.5s ease;
+            --paper: #fdfaf3;
+            --linen: #efdfbb;
+            --ink: #2c3e50;
+            --sage: #6b7a3d;
+            --teal: #3d7a75;
         }
 
         body {
-            background-color: var(--bg-paper);
+            background-color: var(--linen);
             background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
-            font-family: 'EB Garamond', serif; color: var(--text-main);
-            margin: 0; padding: 10px; display: flex; justify-content: center;
+            font-family: 'EB Garamond', serif;
+            color: var(--ink);
+            margin: 0; padding: 20px;
         }
 
-        .studio-wrapper { max-width: 1400px; width: 100%; display: flex; flex-direction: column; gap: 20px; }
-        
-        header { text-align: center; padding: 20px; border-bottom: 2px solid var(--border-color); }
+        .container { max-width: 1000px; margin: auto; }
+
+        /* Header Area */
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--sage);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+        }
+
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0; }
+        .tagline { letter-spacing: 3px; font-size: 0.9rem; text-transform: uppercase; color: var(--sage); }
 
-        .main-layout { display: grid; grid-template-columns: 320px 1fr 300px; gap: 20px; }
-
-        .panel { 
-            background: var(--panel-bg); padding: 20px; border: 1px solid var(--border-color); 
-            box-shadow: 5px 5px 0px rgba(0,0,0,0.05); position: relative;
+        /* Dashboard Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
 
-        /* Interactive Canvas & Drawing */
-        #canvas-wrap { position: relative; width: 100%; height: 500px; background: #fff; border: 1px solid #ddd; cursor: crosshair; }
-        #art-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        #drawing-layer { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; }
-        
-        .overlay-ui { position: absolute; bottom: 20px; width: 100%; text-align: center; z-index: 10; pointer-events: none; }
-        .caption { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--accent-secondary); text-shadow: 0 0 10px #fff; }
+        .card {
+            background: var(--paper);
+            padding: 25px;
+            border: 1px solid #d1c0a3;
+            box-shadow: 10px 10px 0px rgba(107, 122, 61, 0.1);
+        }
 
-        /* Controls */
-        .tool-section { margin-bottom: 20px; }
-        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: bold; }
-        select, input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: inherit; background: #fff; margin-bottom: 10px; box-sizing: border-box;}
-        
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { padding: 12px; cursor: pointer; border: none; border-radius: 4px; font-family: inherit; font-weight: bold; transition: 0.2s; }
-        .btn-generate { background: var(--accent-primary); color: white; grid-column: span 2; }
-        .btn-save { background: var(--accent-secondary); color: white; }
-        .btn-clear { background: #d9534f; color: white; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        h2 { font-family: 'Dancing Script', cursive; font-size: 2rem; margin-top: 0; color: var(--sage); }
 
-        /* Moodboard & History */
-        .moodboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 15px; }
-        .pin-item { background: #fff; padding: 5px; border: 1px solid var(--border-color); font-size: 0.7rem; box-shadow: 3px 3px 0px #ccc; }
-        .pin-thumb { height: 80px; width: 100%; background-size: cover; margin-bottom: 5px; }
+        /* Interactive Elements */
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #d1c0a3;
+            font-family: 'EB Garamond', serif;
+            background: transparent;
+        }
 
-        .history-list { height: 200px; overflow-y: auto; font-size: 0.85rem; line-height: 1.6; }
+        .btn {
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
 
-        @media (max-width: 1100px) { .main-layout { grid-template-columns: 1fr; } }
+        .btn:hover { background: var(--teal); }
+
+        /* Moodboard List */
+        .list-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #d1c0a3;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .canvas-area {
+            height: 200px;
+            background: linear-gradient(to bottom, #fdfaf3, #f2e8cf);
+            border: 1px solid #d1c0a3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="studio-wrapper">
+<div class="container">
     <header>
-        <h1>S.B.D.E. Studio™</h1>
-        <p>Professional Fashion Creator Suite</p>
+        <h1>Sista Big Dress Energy</h1>
+        <div class="tagline">Creator Studio™</div>
     </header>
 
-    <div class="main-layout">
-        <aside class="panel">
-            <div class="tool-section">
-                <h2>Design Logic</h2>
-                <label>Primary Fabric</label>
-                <select id="fabric-sel">
-                    <option>Heavy Silk</option><option>Raw Denim</option>
-                    <option>Organza</option><option>Recycled Wool</option>
-                </select>
+    <div class="dashboard-grid">
+        
+        <div class="card">
+            <h2>Design Logic</h2>
+            <label>Current Character Anchor:</label>
+            <select id="anchor">
+                <option>Sista Series - Core Body</option>
+                <option>Sista Series - Curvy</option>
+                <option>Sista Series - Petite</option>
+            </select>
 
-                <label>Design Mood</label>
-                <select id="mood-sel">
-                    <option>Architectural</option><option>Ethereal</option>
-                    <option>Avant-Garde</option><option>Minimalist</option>
-                </select>
+            <label style="display:block; margin-top:15px;">Fabric Mood:</label>
+            <input type="text" id="fabric" placeholder="e.g., Heavy Flowing Silk">
 
-                <label>Color Palette</label>
-                <input type="color" id="base-color" value="#6b7a3d">
+            <button class="btn" onclick="addLog()">Log This Design</button>
+        </div>
+
+        <div class="card">
+            <h2>Visual Palette</h2>
+            <div class="canvas-area" id="preview">
+                Previewing Your Aesthetic...
             </div>
+            <p style="font-size: 0.8rem; text-align: center; font-style: italic;">"Taking Up Space."</p>
+        </div>
 
-            <div class="btn-group">
-                <button class="btn btn-generate" onclick="generateDesign()">Generate Concept</button>
-                <button class="btn btn-save" onclick="saveToMoodboard()">Save to Board</button>
-                <button class="btn btn-clear" onclick="clearStudio()">Clear All</button>
+        <div class="card">
+            <h2>Design History</h2>
+            <div id="history-list">
+                <div class="list-item"><span>Everyday Radiance</span> <span>10:30 AM</span></div>
             </div>
-        </aside>
+            <button class="btn" style="background:transparent; color: var(--sage); border: 1px solid var(--sage);" onclick="clearHistory()">Clear History</button>
+        </div>
 
-        <main class="panel">
-            <h2>Canvas & Draping Preview</h2>
-            <div id="canvas-wrap">
-                <div id="art-canvas"></div>
-                <canvas id="drawing-layer"></canvas>
-                <div class="overlay-ui">
-                    <div id="active-caption" class="caption">New Design</div>
-                </div>
-            </div>
-            <p style="text-align:center; font-style:italic; margin-top:10px;">Sketch directly on the preview to add notes or draping lines.</p>
-        </main>
-
-        <section class="panel">
+        <div class="card">
             <h2>Creator Notes</h2>
-            <textarea id="studio-notes" placeholder="Draping details, thread counts, inspiration sources..." oninput="saveNotes()"></textarea>
-            
-            <h2 style="margin-top:20px;">Session History</h2>
-            <div id="history" class="history-list"></div>
-        </section>
-    </div>
+            <textarea id="notes" rows="5" placeholder="Write your inspiration here..."></textarea>
+            <button class="btn" onclick="saveNotes()">Save Notes</button>
+        </div>
 
-    <section class="panel">
-        <h2>Active Moodboard</h2>
-        <div id="moodboard" class="moodboard-grid"></div>
-    </section>
+    </div>
 </div>
 
 <script>
-    // 1. Drawing Logic
-    const canvas = document.getElementById('drawing-layer');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-
-    function resizeCanvas() {
-        const rect = document.getElementById('canvas-wrap').getBoundingClientRect();
-        canvas.width = rect.width; canvas.height = rect.height;
-    }
-    window.onload = resizeCanvas; window.onresize = resizeCanvas;
-
-    canvas.addEventListener('mousedown', () => drawing = true);
-    canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-    canvas.addEventListener('mousemove', draw);
-
-    function draw(e) {
-        if (!drawing) return;
-        ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#2c3e50';
-        const rect = canvas.getBoundingClientRect();
-        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-        ctx.stroke();
-    }
-
-    // 2. Generation Logic
-    function generateDesign() {
-        const fabric = document.getElementById('fabric-sel').value;
-        const mood = document.getElementById('mood-sel').value;
-        const color = document.getElementById('base-color').value;
+    // Simple logic to add items to history
+    function addLog() {
+        const fabric = document.getElementById('fabric').value || "Unnamed Fabric";
+        const list = document.getElementById('history-list');
+        const entry = document.createElement('div');
+        entry.className = 'list-item';
+        entry.innerHTML = `<span>${fabric}</span> <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
+        list.prepend(entry);
         
-        document.getElementById('active-caption').innerText = mood;
-        
-        const art = document.getElementById('art-canvas');
-        art.style.background = `radial-gradient(circle at center, ${color}cc, #ffffff)`;
-        art.style.clipPath = `polygon(${Math.random()*100}% 0%, 100% ${Math.random()*100}%, ${Math.random()*100}% 100%, 0% ${Math.random()*100}%)`;
-
-        // Update History
-        const hist = document.getElementById('history');
-        hist.innerHTML = `<div><strong>${mood}</strong> in ${fabric} <small>${new Date().toLocaleTimeString()}</small></div>` + hist.innerHTML;
+        // Visual feedback
+        document.getElementById('preview').style.background = `linear-gradient(45deg, #efdfbb, #6b7a3d)`;
+        document.getElementById('preview').innerText = "Aesthetic Logged!";
     }
 
-    // 3. Save & Clear Logic
-    function saveToMoodboard() {
-        const board = document.getElementById('moodboard');
-        const mood = document.getElementById('mood-sel').value;
-        const artStyle = document.getElementById('art-canvas').style.background;
-        
-        const pin = document.createElement('div');
-        pin.className = 'pin-item';
-        pin.innerHTML = `<div class="pin-thumb" style="background:${artStyle}"></div><strong>${mood}</strong>`;
-        board.appendChild(pin);
+    // Save notes to your browser so they don't disappear
+    function saveNotes() {
+        const notes = document.getElementById('notes').value;
+        localStorage.setItem('sbde_notes', notes);
+        alert("Notes saved to your browser studio!");
     }
 
-    function saveNotes() { localStorage.setItem('sbde_notes', document.getElementById('studio-notes').value); }
-    if(localStorage.getItem('sbde_notes')) document.getElementById('studio-notes').value = localStorage.getItem('sbde_notes');
-
-    function clearStudio() {
-        if(confirm("Clear current canvas and history?")) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            document.getElementById('history').innerHTML = '';
-            document.getElementById('moodboard').innerHTML = '';
-            document.getElementById('active-caption').innerText = 'New Design';
+    // Load saved notes
+    window.onload = function() {
+        if(localStorage.getItem('sbde_notes')) {
+            document.getElementById('notes').value = localStorage.getItem('sbde_notes');
         }
     }
+
+    function clearHistory() {
+        document.getElementById('history-list').innerHTML = '';
+    }
 </script>
+
 </body>
 </html>
