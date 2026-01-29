@@ -3,95 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.B.D.E. Studio | Creator Dashboard</title>
+    <title>S.B.D.E. Studio | Pro Creator Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-paper: #efdfbb;
-            --panel-bg: #fcf6e8;
-            --text-main: #4a4238;
-            --accent-primary: #6b7a3d;
-            --accent-secondary: #2c3e50;
-            --border-color: #d1c0a3;
-            --canvas-filter: none;
-            transition: all 0.6s ease-in-out;
+            --bg-paper: #efdfbb; --panel-bg: #fcf6e8; --text-main: #4a4238;
+            --accent-primary: #6b7a3d; --accent-secondary: #2c3e50;
+            --border-color: #d1c0a3; --canvas-filter: none;
+            transition: background 0.5s ease;
         }
 
         body {
             background-color: var(--bg-paper);
             background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
-            font-family: 'EB Garamond', serif;
-            color: var(--text-main);
-            margin: 0; padding: 20px;
-            display: flex; justify-content: center;
+            font-family: 'EB Garamond', serif; color: var(--text-main);
+            margin: 0; padding: 20px; display: flex; justify-content: center;
         }
 
-        .dashboard { max-width: 1200px; width: 100%; }
-
+        .dashboard { max-width: 1300px; width: 100%; }
         header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0; }
 
-        .grid-container { display: grid; grid-template-columns: 300px 1fr 280px; gap: 25px; }
+        .grid-container { display: grid; grid-template-columns: 320px 1fr 300px; gap: 20px; }
 
         .panel {
-            background: var(--panel-bg);
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.03);
-            border-radius: 4px;
+            background: var(--panel-bg); padding: 20px; border: 1px solid var(--border-color);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.03); border-radius: 4px;
         }
 
-        h2 { font-family: 'Dancing Script', cursive; border-bottom: 1px solid var(--border-color); margin-top: 0; }
+        /* Interactive Canvas */
+        #canvas-container { position: relative; width: 100%; height: 450px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        #art-preview { width: 100%; height: 100%; filter: var(--canvas-filter); display: flex; align-items: center; justify-content: center; }
+        .visual-blob { position: absolute; width: 100%; height: 100%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .caption-overlay { font-family: 'Dancing Script', cursive; font-size: 2.8rem; z-index: 10; pointer-events: none; }
 
-        .input-group {
-            margin-bottom: 15px; padding: 12px; background: #fff; 
-            border: 1px solid #e0d0b0; font-style: italic;
-        }
+        /* Moodboard Gallery */
+        .moodboard { margin-top: 30px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+        .saved-card { background: #fff; padding: 10px; border: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; }
+        .saved-thumb { height: 100px; width: 100%; margin-bottom: 5px; }
 
-        select {
-            width: 100%; padding: 10px; font-family: inherit; margin-top: 5px;
-            border: 1px solid var(--border-color); background: var(--panel-bg);
-        }
-
-        /* Preview Canvas */
-        #art-preview {
-            width: 100%; height: 450px;
-            background: #fff;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-            filter: var(--canvas-filter);
-            border: 8px solid #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .visual-blob {
-            position: absolute; width: 120%; height: 120%;
-            transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0.8;
-        }
-
-        .caption-overlay {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.8rem; color: #2c3e50;
-            z-index: 10; text-shadow: 0 0 15px rgba(255,255,255,0.5);
-        }
-
-        .btn {
-            width: 100%; padding: 14px; font-family: inherit; font-size: 1rem;
-            cursor: pointer; border: none; margin-top: 10px; border-radius: 4px;
-            font-weight: 500;
-        }
+        /* Controls */
+        .control-label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
+        input[type="range"] { width: 100%; accent-color: var(--accent-primary); }
+        .btn { width: 100%; padding: 12px; font-family: inherit; cursor: pointer; border: none; margin-top: 10px; border-radius: 4px; }
         .btn-main { background: var(--accent-primary); color: white; box-shadow: 0 4px 0 #4a542a; }
-        .btn-main:hover { filter: brightness(1.1); }
-        .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #4a542a; }
+        .btn-save { background: var(--accent-secondary); color: white; }
 
-        .history-item { 
-            font-size: 0.85rem; padding: 10px 0; border-bottom: 1px dashed var(--border-color);
-            display: flex; justify-content: space-between;
-        }
-
-        @media (max-width: 1000px) { .grid-container { grid-template-columns: 1fr; } }
+        @media (max-width: 1100px) { .grid-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -99,39 +58,50 @@
 <div class="dashboard">
     <header>
         <h1>S.B.D.E. Studio™</h1>
-        <div style="letter-spacing: 4px; font-size: 0.8rem; opacity: 0.7;">CREATOR DASHBOARD</div>
+        <div style="letter-spacing: 4px; font-size: 0.8rem; opacity: 0.7;">PRO CREATOR DASHBOARD</div>
     </header>
 
     <div class="grid-container">
         <aside class="panel">
             <h2>Design Logic</h2>
+            <label class="control-label">Hue Rotation</label>
+            <input type="range" id="hue-slider" min="0" max="360" value="0" oninput="updateFilters()">
             
-            <label>Style Preset:</label>
-            <select id="style-preset" onchange="applyStylePreset()">
-                <option value="none">Default (Clean)</option>
-                <option value="vintage">Vintage Watercolor</option>
-                <option value="modern">Modern High-Contrast</option>
-            </select>
+            <label class="control-label">Saturation</label>
+            <input type="range" id="sat-slider" min="0" max="200" value="100" oninput="updateFilters()">
 
-            <div class="input-group" style="margin-top:20px;">Fabric: <span id="ui-fabric">Heavy Linen</span></div>
-            <div class="input-group">Mood: <span id="ui-mood">Radiant Presence</span></div>
-            
+            <div style="margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.5);">
+                <small>Fabric: <span id="ui-fabric">...</span></small><br>
+                <small>Mood: <span id="ui-mood">...</span></small>
+            </div>
+
             <button class="btn btn-main" onclick="generateNew()">Generate Visual</button>
-            <button class="btn" style="background: #ddd;" onclick="window.print()">Print Canvas</button>
+            <button class="btn btn-save" onclick="pinToMoodboard()">Pin to Moodboard</button>
         </aside>
 
-        <main class="panel" style="text-align: center;">
-            <div id="art-preview">
-                <div id="visual-element" class="visual-blob"></div>
-                <div id="main-caption" class="caption-overlay">Ready to Create.</div>
+        <main>
+            <div class="panel">
+                <div id="canvas-container">
+                    <div id="art-preview">
+                        <div id="visual-element" class="visual-blob"></div>
+                        <div id="main-caption" class="caption-overlay">Select Style</div>
+                    </div>
+                </div>
             </div>
-            <p style="font-style: italic; margin-top: 15px; opacity: 0.6;">"Taking Up Space is an act of courage."</p>
+
+            <div class="panel moodboard">
+                <h2>Your Moodboard</h2>
+                <div id="gallery" class="gallery-grid">
+                    </div>
+            </div>
         </main>
 
         <section class="panel">
-            <h2>Collection History</h2>
-            <div id="history-list">
-                </div>
+            <h2>Creator Notes</h2>
+            <textarea id="notes" style="width: 100%; height: 150px; border: 1px solid var(--border-color); font-family: inherit; padding: 10px; background: #fff;" placeholder="Journal your inspiration here..."></textarea>
+            
+            <h2 style="margin-top: 20px;">History</h2>
+            <div id="history-list" style="max-height: 200px; overflow-y: auto;"></div>
         </section>
     </div>
 </div>
@@ -139,57 +109,50 @@
 <script>
     const fabrics = ["Silk Chiffon", "Heavy Linen", "Raw Cotton", "Crushed Velvet", "Hand-woven Tulle"];
     const moods = ["Radiant Presence", "Quiet Strength", "Flowing Grace", "Bold Expression", "Calm Joy"];
-    
-    // Aesthetic Presets
-    function applyStylePreset() {
-        const preset = document.getElementById('style-preset').value;
-        const root = document.documentElement;
-        
-        if (preset === 'vintage') {
-            root.style.setProperty('--canvas-filter', 'sepia(0.4) contrast(0.9) saturate(0.8)');
-            root.style.setProperty('--bg-paper', '#e6d5b8');
-        } else if (preset === 'modern') {
-            root.style.setProperty('--canvas-filter', 'contrast(1.2) saturate(1.2)');
-            root.style.setProperty('--bg-paper', '#f0f0f0');
-        } else {
-            root.style.setProperty('--canvas-filter', 'none');
-            root.style.setProperty('--bg-paper', '#efdfbb');
-        }
+
+    function updateFilters() {
+        const h = document.getElementById('hue-slider').value;
+        const s = document.getElementById('sat-slider').value;
+        document.getElementById('art-preview').style.filter = `hue-rotate(${h}deg) saturate(${s}%)`;
     }
 
     function generateNew() {
-        // 1. Randomize Data
         const f = fabrics[Math.floor(Math.random() * fabrics.length)];
         const m = moods[Math.floor(Math.random() * moods.length)];
         
-        // 2. Update Text UI
         document.getElementById('ui-fabric').innerText = f;
         document.getElementById('ui-mood').innerText = m;
         document.getElementById('main-caption').innerText = m + ".";
 
-        // 3. Update Visual Blob (Generative Art)
         const vis = document.getElementById('visual-element');
-        const hue1 = Math.floor(Math.random() * 360);
-        const hue2 = (hue1 + 40) % 360;
-        
-        vis.style.background = `linear-gradient(${Math.random() * 360}deg, hsl(${hue1}, 50%, 70%), hsl(${hue2}, 40%, 80%))`;
-        vis.style.clipPath = `polygon(${Math.random()*20}% ${Math.random()*20}%, ${80+Math.random()*20}% ${Math.random()*20}%, ${80+Math.random()*20}% ${80+Math.random()*20}%, ${Math.random()*20}% ${80+Math.random()*20}%, ${Math.random()*50}% ${Math.random()*50}%)`;
-        vis.style.borderRadius = `${Math.random()*100}% ${Math.random()*100}% ${Math.random()*100}% ${Math.random()*100}%`;
+        vis.style.background = `linear-gradient(${Math.random() * 360}deg, #6b7a3d, #3d7a75, #2c3e50)`;
+        vis.style.clipPath = `polygon(${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%)`;
+        vis.style.borderRadius = `${Math.random()*100}%`;
 
-        // 4. Add to History
-        const list = document.getElementById('history-list');
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        item.innerHTML = `<span><strong>${m}</strong> (${f})</span> <span style="opacity:0.5">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
-        list.prepend(item);
+        // Add to history
+        const hist = document.getElementById('history-list');
+        const entry = document.createElement('div');
+        entry.style.fontSize = "0.8rem"; entry.style.borderBottom = "1px solid #ddd"; entry.style.padding = "5px 0";
+        entry.innerHTML = `<strong>${m}</strong> - ${f}`;
+        hist.prepend(entry);
     }
 
-    // Run on startup
+    function pinToMoodboard() {
+        const gallery = document.getElementById('gallery');
+        const currentArt = document.getElementById('visual-element').style.background;
+        const currentCaption = document.getElementById('main-caption').innerText;
+        const currentFilter = document.getElementById('art-preview').style.filter;
+
+        const card = document.createElement('div');
+        card.className = 'saved-card';
+        card.innerHTML = `
+            <div class="saved-thumb" style="background: ${currentArt}; filter: ${currentFilter};"></div>
+            <strong>${currentCaption}</strong>
+        `;
+        gallery.appendChild(card);
+    }
+
     generateNew();
 </script>
 </body>
 </html>
-
-
-
-
