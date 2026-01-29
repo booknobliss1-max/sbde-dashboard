@@ -3,156 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.B.D.E. Studio | Pro Creator Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <title>S.B.D.E. Studio | Pro Fashion Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-paper: #efdfbb; --panel-bg: #fcf6e8; --text-main: #4a4238;
             --accent-primary: #6b7a3d; --accent-secondary: #2c3e50;
-            --border-color: #d1c0a3; --canvas-filter: none;
-            transition: background 0.5s ease;
+            --border-color: #d1c0a3; transition: all 0.5s ease;
         }
 
         body {
             background-color: var(--bg-paper);
             background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
             font-family: 'EB Garamond', serif; color: var(--text-main);
-            margin: 0; padding: 20px; display: flex; justify-content: center;
+            margin: 0; padding: 10px; display: flex; justify-content: center;
         }
 
-        .dashboard { max-width: 1300px; width: 100%; }
-        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
+        .studio-wrapper { max-width: 1400px; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+        
+        header { text-align: center; padding: 20px; border-bottom: 2px solid var(--border-color); }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0; }
 
-        .grid-container { display: grid; grid-template-columns: 320px 1fr 300px; gap: 20px; }
+        .main-layout { display: grid; grid-template-columns: 320px 1fr 300px; gap: 20px; }
 
-        .panel {
-            background: var(--panel-bg); padding: 20px; border: 1px solid var(--border-color);
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.03); border-radius: 4px;
+        .panel { 
+            background: var(--panel-bg); padding: 20px; border: 1px solid var(--border-color); 
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.05); position: relative;
         }
 
-        /* Interactive Canvas */
-        #canvas-container { position: relative; width: 100%; height: 450px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
-        #art-preview { width: 100%; height: 100%; filter: var(--canvas-filter); display: flex; align-items: center; justify-content: center; }
-        .visual-blob { position: absolute; width: 100%; height: 100%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .caption-overlay { font-family: 'Dancing Script', cursive; font-size: 2.8rem; z-index: 10; pointer-events: none; }
-
-        /* Moodboard Gallery */
-        .moodboard { margin-top: 30px; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
-        .saved-card { background: #fff; padding: 10px; border: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; }
-        .saved-thumb { height: 100px; width: 100%; margin-bottom: 5px; }
+        /* Interactive Canvas & Drawing */
+        #canvas-wrap { position: relative; width: 100%; height: 500px; background: #fff; border: 1px solid #ddd; cursor: crosshair; }
+        #art-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        #drawing-layer { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; }
+        
+        .overlay-ui { position: absolute; bottom: 20px; width: 100%; text-align: center; z-index: 10; pointer-events: none; }
+        .caption { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--accent-secondary); text-shadow: 0 0 10px #fff; }
 
         /* Controls */
-        .control-label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
-        input[type="range"] { width: 100%; accent-color: var(--accent-primary); }
-        .btn { width: 100%; padding: 12px; font-family: inherit; cursor: pointer; border: none; margin-top: 10px; border-radius: 4px; }
-        .btn-main { background: var(--accent-primary); color: white; box-shadow: 0 4px 0 #4a542a; }
+        .tool-section { margin-bottom: 20px; }
+        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: bold; }
+        select, input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: inherit; background: #fff; margin-bottom: 10px; box-sizing: border-box;}
+        
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 12px; cursor: pointer; border: none; border-radius: 4px; font-family: inherit; font-weight: bold; transition: 0.2s; }
+        .btn-generate { background: var(--accent-primary); color: white; grid-column: span 2; }
         .btn-save { background: var(--accent-secondary); color: white; }
+        .btn-clear { background: #d9534f; color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        @media (max-width: 1100px) { .grid-container { grid-template-columns: 1fr; } }
+        /* Moodboard & History */
+        .moodboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 15px; }
+        .pin-item { background: #fff; padding: 5px; border: 1px solid var(--border-color); font-size: 0.7rem; box-shadow: 3px 3px 0px #ccc; }
+        .pin-thumb { height: 80px; width: 100%; background-size: cover; margin-bottom: 5px; }
+
+        .history-list { height: 200px; overflow-y: auto; font-size: 0.85rem; line-height: 1.6; }
+
+        @media (max-width: 1100px) { .main-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
+<div class="studio-wrapper">
     <header>
         <h1>S.B.D.E. Studio™</h1>
-        <div style="letter-spacing: 4px; font-size: 0.8rem; opacity: 0.7;">PRO CREATOR DASHBOARD</div>
+        <p>Professional Fashion Creator Suite</p>
     </header>
 
-    <div class="grid-container">
+    <div class="main-layout">
         <aside class="panel">
-            <h2>Design Logic</h2>
-            <label class="control-label">Hue Rotation</label>
-            <input type="range" id="hue-slider" min="0" max="360" value="0" oninput="updateFilters()">
-            
-            <label class="control-label">Saturation</label>
-            <input type="range" id="sat-slider" min="0" max="200" value="100" oninput="updateFilters()">
+            <div class="tool-section">
+                <h2>Design Logic</h2>
+                <label>Primary Fabric</label>
+                <select id="fabric-sel">
+                    <option>Heavy Silk</option><option>Raw Denim</option>
+                    <option>Organza</option><option>Recycled Wool</option>
+                </select>
 
-            <div style="margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.5);">
-                <small>Fabric: <span id="ui-fabric">...</span></small><br>
-                <small>Mood: <span id="ui-mood">...</span></small>
+                <label>Design Mood</label>
+                <select id="mood-sel">
+                    <option>Architectural</option><option>Ethereal</option>
+                    <option>Avant-Garde</option><option>Minimalist</option>
+                </select>
+
+                <label>Color Palette</label>
+                <input type="color" id="base-color" value="#6b7a3d">
             </div>
 
-            <button class="btn btn-main" onclick="generateNew()">Generate Visual</button>
-            <button class="btn btn-save" onclick="pinToMoodboard()">Pin to Moodboard</button>
+            <div class="btn-group">
+                <button class="btn btn-generate" onclick="generateDesign()">Generate Concept</button>
+                <button class="btn btn-save" onclick="saveToMoodboard()">Save to Board</button>
+                <button class="btn btn-clear" onclick="clearStudio()">Clear All</button>
+            </div>
         </aside>
 
-        <main>
-            <div class="panel">
-                <div id="canvas-container">
-                    <div id="art-preview">
-                        <div id="visual-element" class="visual-blob"></div>
-                        <div id="main-caption" class="caption-overlay">Select Style</div>
-                    </div>
+        <main class="panel">
+            <h2>Canvas & Draping Preview</h2>
+            <div id="canvas-wrap">
+                <div id="art-canvas"></div>
+                <canvas id="drawing-layer"></canvas>
+                <div class="overlay-ui">
+                    <div id="active-caption" class="caption">New Design</div>
                 </div>
             </div>
-
-            <div class="panel moodboard">
-                <h2>Your Moodboard</h2>
-                <div id="gallery" class="gallery-grid">
-                    </div>
-            </div>
+            <p style="text-align:center; font-style:italic; margin-top:10px;">Sketch directly on the preview to add notes or draping lines.</p>
         </main>
 
         <section class="panel">
             <h2>Creator Notes</h2>
-            <textarea id="notes" style="width: 100%; height: 150px; border: 1px solid var(--border-color); font-family: inherit; padding: 10px; background: #fff;" placeholder="Journal your inspiration here..."></textarea>
+            <textarea id="studio-notes" placeholder="Draping details, thread counts, inspiration sources..." oninput="saveNotes()"></textarea>
             
-            <h2 style="margin-top: 20px;">History</h2>
-            <div id="history-list" style="max-height: 200px; overflow-y: auto;"></div>
+            <h2 style="margin-top:20px;">Session History</h2>
+            <div id="history" class="history-list"></div>
         </section>
     </div>
+
+    <section class="panel">
+        <h2>Active Moodboard</h2>
+        <div id="moodboard" class="moodboard-grid"></div>
+    </section>
 </div>
 
 <script>
-    const fabrics = ["Silk Chiffon", "Heavy Linen", "Raw Cotton", "Crushed Velvet", "Hand-woven Tulle"];
-    const moods = ["Radiant Presence", "Quiet Strength", "Flowing Grace", "Bold Expression", "Calm Joy"];
+    // 1. Drawing Logic
+    const canvas = document.getElementById('drawing-layer');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
 
-    function updateFilters() {
-        const h = document.getElementById('hue-slider').value;
-        const s = document.getElementById('sat-slider').value;
-        document.getElementById('art-preview').style.filter = `hue-rotate(${h}deg) saturate(${s}%)`;
+    function resizeCanvas() {
+        const rect = document.getElementById('canvas-wrap').getBoundingClientRect();
+        canvas.width = rect.width; canvas.height = rect.height;
+    }
+    window.onload = resizeCanvas; window.onresize = resizeCanvas;
+
+    canvas.addEventListener('mousedown', () => drawing = true);
+    canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+        if (!drawing) return;
+        ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#2c3e50';
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
     }
 
-    function generateNew() {
-        const f = fabrics[Math.floor(Math.random() * fabrics.length)];
-        const m = moods[Math.floor(Math.random() * moods.length)];
+    // 2. Generation Logic
+    function generateDesign() {
+        const fabric = document.getElementById('fabric-sel').value;
+        const mood = document.getElementById('mood-sel').value;
+        const color = document.getElementById('base-color').value;
         
-        document.getElementById('ui-fabric').innerText = f;
-        document.getElementById('ui-mood').innerText = m;
-        document.getElementById('main-caption').innerText = m + ".";
+        document.getElementById('active-caption').innerText = mood;
+        
+        const art = document.getElementById('art-canvas');
+        art.style.background = `radial-gradient(circle at center, ${color}cc, #ffffff)`;
+        art.style.clipPath = `polygon(${Math.random()*100}% 0%, 100% ${Math.random()*100}%, ${Math.random()*100}% 100%, 0% ${Math.random()*100}%)`;
 
-        const vis = document.getElementById('visual-element');
-        vis.style.background = `linear-gradient(${Math.random() * 360}deg, #6b7a3d, #3d7a75, #2c3e50)`;
-        vis.style.clipPath = `polygon(${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%)`;
-        vis.style.borderRadius = `${Math.random()*100}%`;
-
-        // Add to history
-        const hist = document.getElementById('history-list');
-        const entry = document.createElement('div');
-        entry.style.fontSize = "0.8rem"; entry.style.borderBottom = "1px solid #ddd"; entry.style.padding = "5px 0";
-        entry.innerHTML = `<strong>${m}</strong> - ${f}`;
-        hist.prepend(entry);
+        // Update History
+        const hist = document.getElementById('history');
+        hist.innerHTML = `<div><strong>${mood}</strong> in ${fabric} <small>${new Date().toLocaleTimeString()}</small></div>` + hist.innerHTML;
     }
 
-    function pinToMoodboard() {
-        const gallery = document.getElementById('gallery');
-        const currentArt = document.getElementById('visual-element').style.background;
-        const currentCaption = document.getElementById('main-caption').innerText;
-        const currentFilter = document.getElementById('art-preview').style.filter;
-
-        const card = document.createElement('div');
-        card.className = 'saved-card';
-        card.innerHTML = `
-            <div class="saved-thumb" style="background: ${currentArt}; filter: ${currentFilter};"></div>
-            <strong>${currentCaption}</strong>
-        `;
-        gallery.appendChild(card);
+    // 3. Save & Clear Logic
+    function saveToMoodboard() {
+        const board = document.getElementById('moodboard');
+        const mood = document.getElementById('mood-sel').value;
+        const artStyle = document.getElementById('art-canvas').style.background;
+        
+        const pin = document.createElement('div');
+        pin.className = 'pin-item';
+        pin.innerHTML = `<div class="pin-thumb" style="background:${artStyle}"></div><strong>${mood}</strong>`;
+        board.appendChild(pin);
     }
 
-    generateNew();
+    function saveNotes() { localStorage.setItem('sbde_notes', document.getElementById('studio-notes').value); }
+    if(localStorage.getItem('sbde_notes')) document.getElementById('studio-notes').value = localStorage.getItem('sbde_notes');
+
+    function clearStudio() {
+        if(confirm("Clear current canvas and history?")) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('history').innerHTML = '';
+            document.getElementById('moodboard').innerHTML = '';
+            document.getElementById('active-caption').innerText = 'New Design';
+        }
+    }
 </script>
 </body>
 </html>
